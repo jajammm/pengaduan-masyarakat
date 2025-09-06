@@ -5,7 +5,7 @@
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+        <div class="sidebar-brand-text mx-3">Pengaduan Masyarakat</div>
     </a>
 
     <!-- Divider -->
@@ -21,18 +21,18 @@
     <!-- Nav Item - Tables -->
     <li class="nav-item {{ request()->is('admin/resident*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.resident.index') }}">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-users"></i>
             <span>Data Masyarakat</span></a>
     </li>
     <li class="nav-item {{ request()->is('admin/report-category*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.report-category.index') }}">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-folder"></i>
             <span>Data Kategori</span></a>
     </li>
     <li
         class="nav-item {{ request()->is('admin/report*') && !request()->is('admin/report-category*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.report.index') }}">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-file-alt"></i>
             <span>Data Laporan</span></a>
     </li>
 

@@ -92,7 +92,9 @@
                                         <span>-</span>
                                     @endif
                                 </td>
-                                <td>{{ $status->status }}</td>
+                                <td>
+                                    {{ $status->status }}
+                                </td>
                                 <td>{{ $status->description }}</td>
                                 <td>
                                     <a href="{{ route('admin.report-status.edit', $status->id) }}"

@@ -10,6 +10,8 @@ use App\Interfaces\ReportStatusRepositoryInterface;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert as Swal;
+use App\Notifications\ReportStatusChanged;
+use App\Models\User;
 
 class ReportStatusController extends Controller
 {
@@ -50,9 +52,19 @@ class ReportStatusController extends Controller
             $data['image'] = $request->file('image')->store('assets/report-status/image', 'public');
         }
 
-        $this->reportStatusRepository->createReportStatus($data);
+        $status = $this->reportStatusRepository->createReportStatus($data);
 
-        Swal::toast('Data progress laporan berhasil ditambahkan.', 'success')->timerProgressBar();
+        // Notifikasi ke user pelapor
+        $report = $this->reportRepository->getReportById($data['report_id']);
+        if ($report && $report->resident && $report->resident->user) {
+            $report->resident->user->notify(new ReportStatusChanged($report, $data['status'], $data['description'] ?? null));
+        }
+        // Notifikasi ke semua admin
+        foreach (User::role('admin')->get() as $admin) {
+            $admin->notify(new ReportStatusChanged($report, $data['status'], $data['description'] ?? null));
+        }
+
+        Swal::toast('Data progress laporan berhasil ditambahkan & notifikasi dikirim.', 'success')->timerProgressBar();
 
         return redirect()->route('admin.report.show', $request->report_id);
     }
@@ -88,7 +100,18 @@ class ReportStatusController extends Controller
 
         $this->reportStatusRepository->updateReportStatus($data, $id);
 
-        Swal::toast('Data status laporan berhasil diperbarui.', 'success')->timerProgressBar();
+        // Notifikasi ke user pelapor
+        $status = $this->reportStatusRepository->getReportStatusById($id);
+        $report = $this->reportRepository->getReportById($status->report_id);
+        if ($report && $report->resident && $report->resident->user) {
+            $report->resident->user->notify(new ReportStatusChanged($report, $data['status'], $data['description'] ?? null));
+        }
+        // Notifikasi ke semua admin
+        foreach (User::role('admin')->get() as $admin) {
+            $admin->notify(new ReportStatusChanged($report, $data['status'], $data['description'] ?? null));
+        }
+
+        Swal::toast('Data status laporan berhasil diperbarui & notifikasi dikirim.', 'success')->timerProgressBar();
 
         return redirect()->route('admin.report.show', $request->report_id);
     }
