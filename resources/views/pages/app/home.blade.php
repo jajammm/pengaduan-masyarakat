@@ -57,7 +57,7 @@
                                     <img src="{{ asset('assets/app/images/icons/mapPin.png') }}" alt="map pin"
                                         class="icon me-2">
                                     <p class="text-primary city">
-                                        {{ $report->address }}
+                                        {{ \Str::limit($report->address, 20, '...') }}
                                     </p>
                                 </div>
 

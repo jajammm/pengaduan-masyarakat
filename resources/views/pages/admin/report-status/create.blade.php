@@ -29,7 +29,7 @@
                         <option value="in_process" @if (old('status') == 'in_process') selected @endif>
                             In Process
                         </option>
-                        <option value="complete" @if (old('status') == 'completed') selected @endif>
+                        <option value="completed" @if (old('status') == 'completed') selected @endif>
                             Completed
                         </option>
                         <option value="rejected" @if (old('status') == 'rejected') selected @endif>

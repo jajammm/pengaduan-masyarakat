@@ -7,6 +7,8 @@ use App\Models\Report;
 use App\Models\ReportCategory;
 use App\Models\Resident;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class ReportRepository implements ReportRepositoryInterface
 {
@@ -18,6 +20,19 @@ class ReportRepository implements ReportRepositoryInterface
     public function getLatestReport()
     {
         return Report::latest()->get()->take(5);
+    }
+
+    public function getReportsByResidentId(string $status)
+    {
+        return Report::where('resident_id', Auth::user()->resident->id)
+            ->whereHas('reportStatuses', function (Builder $query) use ($status) {
+                $query->where('status', $status)
+                    ->whereIn('id', function ($subQuery) {
+                        $subQuery->selectRaw('MAX(id)')
+                            ->from('report_statuses')
+                            ->groupBy('report_id');
+                    });
+            })->get();
     }
 
     public function getReportById(int $id)
@@ -40,7 +55,13 @@ class ReportRepository implements ReportRepositoryInterface
 
     public function createReport(array $data)
     {
-        return Report::create($data);
+        $report = Report::create($data);
+        $report->reportStatuses()->create([
+            'status' => 'delivered',
+            'description' => 'Laporan berhasil diterima',
+        ]);
+
+        return $report;
     }
 
     public function updateReport(array $data, int $id)

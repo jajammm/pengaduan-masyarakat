@@ -18,6 +18,12 @@ Route::get('/reports', [UserReportController::class, 'index'])->name('report.ind
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/take-report', [UserReportController::class, 'take'])->name('report.take');
+    Route::get('/preview', [UserReportController::class, 'preview'])->name('report.preview');
+    Route::get('/create-report', [UserReportController::class, 'create'])->name('report.create');
+    Route::post('/create-report', [UserReportController::class, 'store'])->name('report.store');
+    Route::get('/report-success', [UserReportController::class, 'success'])->name('report.success');
+    Route::get('/my-report', [UserReportController::class, 'myReport'])->name('report.myreport');
 });
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');

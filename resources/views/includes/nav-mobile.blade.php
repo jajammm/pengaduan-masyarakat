@@ -1,4 +1,4 @@
-<div class="floating-button-container d-flex" onclick="window.location.href = 'take.html'">
+<div class="floating-button-container d-flex" onclick="window.location.href = 'take-report'">
     <button class="floating-button">
         <i class="fa-solid fa-camera"></i>
     </button>
@@ -8,7 +8,7 @@
         <i class="fas fa-house"></i>
         Beranda
     </a>
-    <a href="my-reports.html" class="">
+    <a href="{{ route('report.myreport', ['status' => 'delivered']) }}" class="">
         <i class="fas fa-solid fa-clipboard-list"></i>
         Laporanmu
     </a>
