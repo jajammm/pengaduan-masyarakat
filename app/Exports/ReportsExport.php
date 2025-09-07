@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Exports;
+
+use App\Models\Report;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
+
+class ReportsExport implements FromCollection, WithHeadings, WithMapping
+{
+    protected $start_date;
+    protected $end_date;
+
+    public function __construct($start_date = null, $end_date = null)
+    {
+        $this->start_date = $start_date;
+        $this->end_date = $end_date;
+    }
+
+    public function collection()
+    {
+        $query = Report::with(['reportCategory', 'resident.user']);
+        if ($this->start_date && $this->end_date) {
+            $query->whereBetween('created_at', [$this->start_date . ' 00:00:00', $this->end_date . ' 23:59:59']);
+        } elseif ($this->start_date) {
+            $query->whereDate('created_at', '>=', $this->start_date);
+        } elseif ($this->end_date) {
+            $query->whereDate('created_at', '<=', $this->end_date);
+        }
+        return $query->orderBy('created_at', 'desc')->get();
+    }
+
+    public function map($report): array
+    {
+        return [
+            '', // No, diisi di Excel
+            $report->code,
+            $report->title,
+            $report->reportCategory->name ?? '-',
+            $report->address,
+            $report->resident->user->name ?? '-',
+            $report->created_at ? $report->created_at->format('Y-m-d H:i') : '-',
+            $report->reportStatuses()->where('status', 'completed')->orderByDesc('created_at')->value('created_at')
+                ? $report->reportStatuses()->where('status', 'completed')->orderByDesc('created_at')->value('created_at')->format('Y-m-d H:i') : '-',
+        ];
+    }
+
+    public function headings(): array
+    {
+        $periode = 'Semua Data';
+        if ($this->start_date && $this->end_date) {
+            $periode = 'Periode: ' . $this->start_date . ' s/d ' . $this->end_date;
+        } elseif ($this->start_date) {
+            $periode = 'Mulai ' . $this->start_date;
+        } elseif ($this->end_date) {
+            $periode = 'Hingga ' . $this->end_date;
+        }
+        return [
+            [$periode],
+            ['No', 'Kode Laporan', 'Judul Laporan', 'Kategori Laporan', 'Lokasi Laporan', 'Yang Melapor', 'Tanggal Melapor', 'Tanggal Laporan Selesai'],
+        ];
+    }
+}

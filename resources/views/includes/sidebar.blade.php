@@ -2,9 +2,6 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-        </div>
         <div class="sidebar-brand-text mx-3">Pengaduan Masyarakat</div>
     </a>
 
@@ -29,11 +26,19 @@
             <i class="fas fa-fw fa-folder"></i>
             <span>Data Kategori</span></a>
     </li>
+
+
     <li
-        class="nav-item {{ request()->is('admin/report*') && !request()->is('admin/report-category*') ? 'active' : '' }}">
+        class="nav-item {{ request()->is('admin/report*') && !request()->is('admin/report-category*') && !request()->is('admin/report-export*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.report.index') }}">
             <i class="fas fa-fw fa-file-alt"></i>
             <span>Data Laporan</span></a>
+    </li>
+
+    <li class="nav-item {{ request()->is('admin/report-export*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.report.export') }}">
+            <i class="fas fa-fw fa-file-export"></i>
+            <span>Export Laporan</span></a>
     </li>
 
 

@@ -42,4 +42,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 
     Route::get('/report-status/{reportId}/create', [ReportStatusController::class, 'create'])->name('report-status.create');
     Route::resource('/report-status', ReportStatusController::class)->except('create');
+
+    // Export Laporan
+    Route::get('/report-export', [\App\Http\Controllers\Admin\ReportExportController::class, 'index'])->name('report.export');
+    Route::get('/report-export/excel', [\App\Http\Controllers\Admin\ReportExportController::class, 'exportExcel'])->name('report.export.excel');
+    Route::get('/report-export/pdf', [\App\Http\Controllers\Admin\ReportExportController::class, 'exportPdf'])->name('report.export.pdf');
 });
