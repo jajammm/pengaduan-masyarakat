@@ -12,8 +12,10 @@
 </head>
 
 <body>
-    <div class="max-w-screen-sm mx-auto bg-white min-vh-100 p-3">
-        @yield('content')
+    <div id="app">
+        <div class="max-w-screen-sm mx-auto bg-white min-vh-100 p-3">
+            @yield('content')
+        </div>
     </div>
 
     @include('includes.nav-mobile')

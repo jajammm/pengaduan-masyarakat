@@ -16,7 +16,7 @@
     <div></div>
     <div></div>
     <div></div>
-    <a href="" class="">
+    <a href="{{ route('notification') }}" class="">
         <i class="fas fa-bell"></i>
         Notifikasi
     </a>

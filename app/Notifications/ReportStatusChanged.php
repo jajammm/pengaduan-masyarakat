@@ -32,7 +32,7 @@ class ReportStatusChanged extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -68,7 +68,9 @@ class ReportStatusChanged extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'title' => 'Status Laporan Anda Berubah',
+            'body' => 'Status laporan "' . $this->report->title . '" berubah menjadi ' . ucfirst(str_replace('_', ' ', $this->newStatus)) . '.',
+            'url' => method_exists($this->report, 'getUrl') ? $this->report->getUrl() : url('/report/' . $this->report->code),
         ];
     }
 }
