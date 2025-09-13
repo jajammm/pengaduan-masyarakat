@@ -1,4 +1,4 @@
-<div class="floating-button-container d-flex" onclick="window.location.href = 'take-report'">
+<div class="floating-button-container d-flex" onclick="window.location.href='{{ route('report.create') }}'">
     <button class="floating-button">
         <i class="fa-solid fa-camera"></i>
     </button>
@@ -16,7 +16,7 @@
     <div></div>
     <div></div>
     <div></div>
-    <a href="{{ route('notification') }}" class="">
+    <a href="" class="">
         <i class="fas fa-bell"></i>
         Notifikasi
     </a>

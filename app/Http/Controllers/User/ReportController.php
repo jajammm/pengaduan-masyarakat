@@ -49,6 +49,12 @@ class ReportController extends Controller
         return view('pages.app.report.take');
     }
 
+    public function media()
+    {
+        // Halaman pilihan metode pelaporan: upload foto dari galeri atau ambil foto langsung
+        return view('pages.app.report.media');
+    }
+
     public function preview()
     {
         return view('pages.app.report.preview');
